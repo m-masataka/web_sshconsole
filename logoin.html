@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>Login</title>
+    </head>
+    <body>
+        {% if error %}
+            {{ error }}
+        {% endif %}
+        <form method="POST">
+            username: <input type="text" name="username" /><br />
+            <input type="submit"/>
+            <input type="reset" />
+        </form>
+    </body>
+</html>

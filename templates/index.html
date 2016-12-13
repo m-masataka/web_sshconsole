@@ -1,0 +1,89 @@
+<!DOCTYPR html>
+<html>
+<head>
+    <title>WebSSH</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var uri = "ws://"+ location.host +"/web/";
+        console.log(uri);
+        var webSocket = null;
+
+        function init(){
+            $("[data-name='message']").keypress(press);
+            open();
+        }
+
+        function open(){
+            if(webSocket == null){
+                webSocket = new WebSocket(uri);
+                webSocket.onopen = onOpen;
+                webSocket.onmessage=onMessage;
+                webSocket.onclose = onClose;
+                webSocket.onerror = onError;
+            }
+        }
+
+        function onOpen(event){
+            chat("connected");
+        }
+        function onMessage(event){
+            if(event && event.data){
+                chat(event.data);
+            }
+        }
+
+        function onError(event){
+            chat("error");
+        }
+
+        function onClose(event){
+            chat("connection closed. "+ event.code);
+            webSocket = null;
+            setTimeout("open()",3000);
+        }
+
+        function press(event){
+            if(event && event.which == 13){
+                $("[data-name='chat']").append("<div>root@ubuntu# "+$("[data-name='message']").val()+"</div>");
+                var message = $("[data-name='message']").val();
+                if(message && webSocket){
+                    webSocket.send(""+message);
+                    $("[data-name='message']").val("");
+                }
+            }
+        }
+
+        function chat(message){
+            var chats = $("[data-name='chat']").find("div");
+            while (chats.length >= 100){
+                chats = chats.last().remove();
+            }
+            var msgtag = $('<div>').text(message);
+            $("[data-name='chat']").append(msgtag);
+        }
+        $(init);
+    </script>
+</head>
+<style>
+body{
+    background-color:#000000;
+    color:#00ff00;
+    font-family:'arial black';
+}
+input[type="text"], textarea {
+    background-color : #000000; 
+    color:#00ff00;
+    font-family:'arial black';
+}
+input{
+    border:#000000;
+}
+</style>
+<body>
+    <div data-name="chat"></div>
+    root@ubuntu#
+    <input type="text" data-name="message" size="100"/>
+    <hr />
+</body>
+</html>
+

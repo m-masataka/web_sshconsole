@@ -1,0 +1,29 @@
+<html>
+<head>
+<style>
+#commandline{
+color:#000000;
+background-color:#99cc00;
+word-wrap:normal;
+}
+</style>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="commandline">
+</div>
+root@ubuntu#
+<input type="text" id="input_command">
+</body>
+<script>
+    $('#input_command').keypress(function(e){
+        console.log(e);
+        if(e.which == 13){
+            $('#commandline').append('vim build_dir/target-mips_34kc_uClibc-0.9.33.2/linux-ar71xx_generic/linux-3.18.44/drivers/net/wireless/ath/ath9k/debug.c<br>');
+            $('#input_command').val('');
+            return false;
+        }
+    });
+</script>
+</html>
+
